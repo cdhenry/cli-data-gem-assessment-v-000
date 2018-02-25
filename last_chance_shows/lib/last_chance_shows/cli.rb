@@ -2,21 +2,17 @@
 class LastChanceShows::CLI
 
   def call
-    puts "Last Chance to See these Broadway/Off Broadway Shows in New York City!"
     list_shows
     menu
     goodbye
   end
 
   def list_shows
-    puts <<-DOC.gsub /^\s*/, ""
-      "Closing Sunday, February 25, 2018"
-      "1. LATIN HISTORY FOR MORONS - Broadway: Studio 54"
-      "2. CARDINAL - Off-Broadway: Second Stage Theater/Tony Kiser Theatre"
-      "3. MILES FOR MARY - Off-Broadway: Playwrights Horizons/Peter Jay Sharp Theater"
-      "Closing Friday, March 2, 2018"
-      "4. FIRE AND AIR - Off-Broadway: Classic Stage Company"
-    DOC
+    puts "Last Chance to See these Broadway/Off-Broadway Shows in New York City!"
+    @shows = LastChanceShows::Shows.closings
+    @shows.each.with_index(1) do |show, i|
+      puts "#{i}. #{show.title} - #{show.size}: #{show.venue}, #{show.closing}."
+    end
   end
 
   def menu
@@ -24,12 +20,10 @@ class LastChanceShows::CLI
     while input != "exit"
       puts "Enter the number of the show you'd like more info on or type 'list' to see the shows again or type 'exit':"
       input = gets.strip.downcase
-      case input
-      when  "1"
-        puts "More info on show 1..."
-      when "2"
-        puts "More info on show 2..."
-      when "list"
+
+      if input.to_i > 0
+        puts @deals[input.to_i-1]
+      elsif input == "list"
         list_shows
       else
         puts "Type in a show number or 'list' or 'exit'"
