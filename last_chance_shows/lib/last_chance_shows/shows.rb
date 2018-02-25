@@ -50,6 +50,7 @@ class LastChanceShows::Shows
     str1_markerstring = ": "
     str2_markerstring = "\n"
     doc = Nokogiri::HTML(open("http://www.playbill.com/article/last-chance-schedule-of-upcoming-broadway-and-off-broadway-show-closings"))
+    doc.search('br').each { |br| br.replace("\n") }
 
     show.title = doc.css("u")[show_number].text
 
@@ -60,13 +61,11 @@ class LastChanceShows::Shows
     end
 
     venue_p = doc.css(".bsp-article-content p")[size_element].text
-    binding.pry
     first = venue_p.index(": ") + 2
-    last = venue_p.index("Written") - 1
-    binding.pry
+    last = venue_p.index("\n") - 1
     show.venue = venue_p[first..last]
-
-    show.closing = doc.css(".cms-h2-h2")[show_number].text
+    #change show closing time to scrape previous h2
+    #show.closing = doc.css("u")[show_number].text
 
     s_address = "http://www.playbill.com/searchpage/search?q="
     parse_title = show.title.split(" ")
