@@ -1,5 +1,2 @@
-require "last_chance_shows/version"
-
-module LastChanceShows
-  # Your code goes here...
-end
+require_relative "./last_chance_shows/version"
+require_relative "./last_chance_shows/cli"
