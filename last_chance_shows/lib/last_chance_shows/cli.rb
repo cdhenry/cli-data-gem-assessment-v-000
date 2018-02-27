@@ -11,7 +11,8 @@ class LastChanceShows::CLI
     puts "Last Chance to See these Broadway/Off-Broadway Shows in New York City!"
     @shows = LastChanceShows::Shows.closings
     @shows.each.with_index(1) do |show, i|
-      puts "#{i}. #{show.title} - #{show.size}: #{show.venue}, #{show.closing}."
+      puts "#{i}. #{show.title}"
+      puts "     #{show.venue} // #{show.closing}"
     end
   end
 
@@ -22,7 +23,7 @@ class LastChanceShows::CLI
       input = gets.strip.downcase
 
       if input.to_i > 0
-        puts @deals[input.to_i-1]
+        puts @shows[input.to_i-1]
       elsif input == "list"
         list_shows
       else

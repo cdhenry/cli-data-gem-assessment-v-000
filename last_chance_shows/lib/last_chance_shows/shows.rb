@@ -3,11 +3,7 @@ class LastChanceShows::Shows
   attr_accessor :title, :venue, :closing, :url
 
   def self.closings
-    #outputs closings with an associated number
-    self.scrape_closings.each.with_index(1) do |show, i|
-       puts "#{i}. #{show.title}"
-       puts "     #{show.venue} // #{show.closing}"
-    end
+    self.scrape_closings
   end
 
   def self.scrape_closings
