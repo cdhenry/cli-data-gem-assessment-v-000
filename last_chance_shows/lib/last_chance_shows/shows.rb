@@ -43,7 +43,8 @@ class LastChanceShows::Shows
         end
         s_url.chomp"+"
         s_url = s_url + "&qasset="
-        show.url = s_url
+        linkpage = Nokogiri::HTML(open(s_url))
+        show.url = "http://www.playbill.com/" + linkpage.css(".bsp-list-promo-title a")[0]["href"]
         shows << show
       end
     end

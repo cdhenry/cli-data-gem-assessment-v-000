@@ -23,7 +23,7 @@ class LastChanceShows::CLI
       input = gets.strip.downcase
 
       if input.to_i > 0
-        puts @shows[input.to_i-1]
+        puts @shows[input.to_i-1].url
       elsif input == "list"
         list_shows
       else
