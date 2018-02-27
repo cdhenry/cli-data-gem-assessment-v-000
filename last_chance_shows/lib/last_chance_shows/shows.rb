@@ -3,6 +3,7 @@ class LastChanceShows::Shows
   attr_accessor :title, :venue, :closing, :url
 
   def self.closings
+    #self.scrape_closings.each_with_index(1) |show, i|
     # puts <<-DOC.gsub /^\s*/, ""
     #   "Closing Sunday, February 25, 2018"
     #   "1. LATIN HISTORY FOR MORONS - Broadway: Studio 54"
@@ -11,23 +12,7 @@ class LastChanceShows::Shows
     #   "Closing Friday, March 2, 2018"
     #   "4. FIRE AND AIR - Off-Broadway: Classic Stage Company"
     # DOC
-
-    # #show_count
-    # doc = Nokogiri::HTML(open("http://www.playbill.com/article/last-chance-schedule-of-upcoming-broadway-and-off-broadway-show-closings"))
-    # show_count = doc.css("u").length
-    #
-    # #close_count
-    # doc2 = Nokogiri::HTML(open("http://www.playbill.com/article/last-chance-schedule-of-upcoming-broadway-and-off-broadway-show-closings"))
-    # close_count = doc2.css(".cms-h2-h2").length
-    # binding.pry
-
-    #self.scrape_shows
   end
-
-  # def self.how_many_shows?
-  #   doc = Nokogiri::HTML(open("http://www.playbill.com/article/last-chance-schedule-of-upcoming-broadway-and-off-broadway-show-closings"))
-  #   doc.css("u").length
-  # end
 
   def self.scrape_closings
     #declaration/assignment of variables
@@ -43,9 +28,8 @@ class LastChanceShows::Shows
         closing_i = i
       end
       #find the <p>'s that contain show information based on current site format (2/26/2018)
-      if elements[i].name == "p" && closing_i > 0 && !(elements[i].text.include?("To purchase"))
+      if elements[i].name == "p" && closing_i > 0 && !(elements[i].text.include?("To purchase")) && elements[i].children[0].name == "u"
         #for each new show create a show class
-        binding.pry
         show = self.new
         #assign title based on text in first child of <p>
         show.title = elements[i].children[0].text
@@ -68,40 +52,9 @@ class LastChanceShows::Shows
         s_url.chomp"+"
         s_url = s_url + "&qasset="
         show.url = s_url
+        shows << show
       end
-      shows << show
     end
-
-    # shows = []
-    # show_counter = (self.how_many_shows? - 1)
-    # while show_counter >= 0
-    #   show_index = (self.how_many_shows? - 1) - show_counter
-    #   doc.css(".bsp-article-content h2").each do |element|
-    #     shows << self.scrape_shows(element, show_index)
-    #   end
-    # end
-
-    #
-    # shows = []
-    #
-    # while show_counter > -1
-    #   show_index = self.how_many_shows? - show_counter - 1
-    #   shows << self.scrape_playbill(show_index)
-    #   show_counter -= 1
-    # end
-    # show_1 = self.new
-    # show_1.title = "LATIN HISTORY FOR MORONS"
-    # show_1.size = "Broadway"
-    # show_1.venue = "Studio 54"
-    # show_1.closing = "Sunday, February 25, 2018"
-    # show_1.url = "http://www.playbill.com/production/latin-history-for-morons-studio-54-2017-2018"
-    #
-    # show_2 = self.new
-    # show_2.title = "CARDINAL"
-    # show_2.size = "Off-Broadway"
-    # show_2.venue = "Second Stage Theater/Tony Kiser Theatre"
-    # show_2.closing = "Sunday, February 25, 2018"
-    # show_2.url = "http://www.playbill.com/production/cardinal-tony-kiser-theatre-2017-2018"
 
     shows
   end
