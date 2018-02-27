@@ -1,3 +1,4 @@
+#Show scraper for all the shows that are closing soon
 class LastChanceShows::Shows
 
   attr_accessor :title, :venue, :closing, :url
@@ -45,10 +46,11 @@ class LastChanceShows::Shows
         s_url = s_url + "&qasset="
         linkpage = Nokogiri::HTML(open(s_url))
         show.url = "http://www.playbill.com/" + linkpage.css(".bsp-list-promo-title a")[0]["href"]
+        #add show to shows array
         shows << show
       end
     end
-
+    #return shows array
     shows
   end
 end
