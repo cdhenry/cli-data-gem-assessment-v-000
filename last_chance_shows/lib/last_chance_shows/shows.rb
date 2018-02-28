@@ -42,10 +42,11 @@ class LastChanceShows::Shows
         title_parse.each do |word|
           s_url += word + "+"
         end
-        s_url.chomp"+"
-        s_url = s_url + "&qasset="
+        s_url.chomp("+")
+        s_url = s_url + "&sort=Relevance&shows=on&qasset="
         linkpage = Nokogiri::HTML(open(s_url))
-        show.url = "http://www.playbill.com/" + linkpage.css(".bsp-list-promo-title a")[0]["href"]
+        show.url = "http://www.playbill.com" + linkpage.css(".bsp-list-promo-title a")[0]["href"]
+        binding.pry
         #add show to shows array
         shows << show
       end
