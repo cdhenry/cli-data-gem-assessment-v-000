@@ -7,6 +7,22 @@ class LastChanceShows::Shows
     self.scrape_closings
   end
 
+  def self.find_show_url(show_title)
+    s_url = "http://www.playbill.com/searchpage/search?q="
+    title_parse = show_title.split(" ")
+    title_parse.each do |word|
+      if word.length > 2
+        s_url += word + "+"
+      end
+    end
+    s_url.chomp("+")
+    s_url = s_url + "&sort=Relevance&shows=on&qasset="
+    linkpage = Nokogiri::HTML(open(s_url))
+    show_links = linkpage.css(".bsp-list-promo-title a")
+    show_i = 0
+    found = false
+  end
+
   def self.scrape_closings
     #declaration/assignment of variables
     shows = []
@@ -17,22 +33,23 @@ class LastChanceShows::Shows
     #find relevant Show Class information by iterating through each element in css class '.bsp-article-content'
     elements.each_with_index do |element, i|
       #capture and index for each 'Show Closing' date
-      if elements[i].name == "h2"
+
+      if element.name == "h2"
         closing_i = i
       end
       #find the <p>'s that contain show information based on current site format (2/26/2018)
-      if elements[i].name == "p" && closing_i > 0 && !(elements[i].text.include?("To purchase")) && elements[i].children[0].name == "u"
+      if element.name == "p" && closing_i > 0 && !(element.text.include?("To purchase")) && element.children[0].name == "u"
         #for each new show create a show class
         show = self.new
         #assign title based on text in first child of <p>
-        show.title = elements[i].children[0].text
+        show.title = element.children[0].text
         #assign closing based on text in the last <h2> field
         show.closing = elements[closing_i].text
         #assign venue based on second child of <p>, but if it contains links continue to capture venue until a <br>
         venue_i = 2
         venue = ""
-        until elements[i].children[venue_i].name == "br"
-          venue += elements[i].children[venue_i].text
+        until element.children[venue_i].name == "br"
+          venue += element.children[venue_i].text
           venue_i += 1
         end
         show.venue = venue
@@ -40,18 +57,33 @@ class LastChanceShows::Shows
         s_url = "http://www.playbill.com/searchpage/search?q="
         title_parse = show.title.split(" ")
         title_parse.each do |word|
-          s_url += word + "+"
+          if word.length > 2
+            s_url += word + "+"
+          end
         end
         s_url.chomp("+")
         s_url = s_url + "&sort=Relevance&shows=on&qasset="
         linkpage = Nokogiri::HTML(open(s_url))
-        show.url = "http://www.playbill.com" + linkpage.css(".bsp-list-promo-title a")[0]["href"]
-        binding.pry
-        #add show to shows array
+        show_links = linkpage.css(".bsp-list-promo-title a")
+        show_i = 0
+        found = false
+
+        show_links.each do |item|
+          if item.text.match(/[\u007B-\u00BF\u02B0-\u037F\u2000-\u2BFF]/)
+            if item.text.strip.length - 11 == show.title.length && item.text.strip[-5..-2].to_i >= Time.now.year - 30
+              show.url = "http://www.playbill.com" + item["href"]
+            end
+          end
+          if item.text.strip.length - 7 == show.title.length && item.text.strip[-5..-2].to_i >= Time.now.year - 30
+            show.url = "http://www.playbill.com" + item["href"]
+          end
+        end
+
+        #add show to show array
         shows << show
       end
     end
-    #return shows array
+    #return shows
     shows
   end
 end

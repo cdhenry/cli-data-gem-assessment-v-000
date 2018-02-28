@@ -22,7 +22,7 @@ class LastChanceShows::Show
     elsif info.include?("Show Times")
       blurb_i = info.index /[.]\S/
       schedule_i = info.index("Show Times")
-      last_i = info.index("Tickets from") - 1
+      last_i = info.index("Tickets") - 1
       show.blurb = info[0..blurb_i]
       show.schedule = info[schedule_i..last_i]
     end
