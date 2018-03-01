@@ -32,6 +32,7 @@ class LastChanceShows::Show
       end
       show.schedule = info[schedule_i..last_i]
     end
+
     #find where run time is listed
     list = doc.css(".bsp-bio-primary-list")
     if list.children[1].text.strip.include?("Running")

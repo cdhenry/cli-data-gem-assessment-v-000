@@ -8,27 +8,35 @@ class LastChanceShows::Shows
   end
 
   def self.scrape_closings
-    #declaration/assignment of variables
-    shows = []
     doc = Nokogiri::HTML(open("http://www.playbill.com/article/last-chance-schedule-of-upcoming-broadway-and-off-broadway-show-closings"))
+    shows = []
+
+    #all the elements in the .bsp-article-content class
     elements = doc.css(".bsp-article-content").children
+
+    #index counter for keeping track of the 'Closing..' <h2>'s
     closing_i = 0
 
     #find relevant Show Class information by iterating through each element in css class '.bsp-article-content'
     elements.each_with_index do |element, i|
-      #capture and index for each 'Show Closing' date
 
+      #capture and index for each 'Show Closing' date
       if element.name == "h2"
         closing_i = i
       end
+
       #find the <p>'s that contain show information based on current site format (2/26/2018)
       if element.name == "p" && closing_i > 0 && !(element.text.include?("To purchase")) && element.children[0].name == "u"
+
         #for each new show create a show class
         show = self.new
+
         #assign title based on text in first child of <p>
         show.title = element.children[0].text
+
         #assign closing based on text in the last <h2> field
         show.closing = elements[closing_i].text
+
         #assign venue based on second child of <p>, but if it contains links continue to capture venue until a <br>
         venue_i = 2
         venue = ""
@@ -37,6 +45,7 @@ class LastChanceShows::Shows
           venue_i += 1
         end
         show.venue = venue
+
         #create show url based on current site url system (2/26/2018) ***Must happen after show.title is assigned
         s_url = "http://www.playbill.com/searchpage/search?q="
         title_parse = show.title.split(" ")
@@ -60,6 +69,8 @@ class LastChanceShows::Shows
               show.url = "http://www.playbill.com" + item["href"]
             end
           end
+
+          #check to see if the searched for link matches the shows title
           if item.text.strip.length - 7 == show.title.length && item.text.strip[-5..-2].to_i >= Time.now.year - 30
             show.url = "http://www.playbill.com" + item["href"]
           end
@@ -69,7 +80,9 @@ class LastChanceShows::Shows
         shows << show
       end
     end
+
     #return shows
     shows
   end
+
 end
