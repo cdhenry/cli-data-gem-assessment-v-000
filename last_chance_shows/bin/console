@@ -11,4 +11,4 @@ require "last_chance_shows"
 # Pry.start
 
 require "irb"
-IRB.start(__FILE__)
+IRB.start()

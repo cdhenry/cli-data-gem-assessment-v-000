@@ -31,17 +31,14 @@ class LastChanceShows::Show
     show.run_time = list.children[1].text.strip
 
     #get the theater url from a level deeper
-    show.theater_url = self.get_theater_url(url)
+    if doc.css(".bsp-bio-subtitle")[0].text.include?("Off-Broadway")
+      last_link = doc.css(".bsp-bio-text a").length - 1
+      show.theater_url = doc.css(".bsp-bio-text a")[last_link]["href"]
+    else
+      show.theater_url = doc.css(".bsp-bio-social-links a")[0]["href"]
+    end
 
     show
-  end
-
-  def self.get_theater_url(url)
-    doc = Nokogiri::HTML(open(url))
-    internal_url = "http://www.playbill.com" + doc.css(".bsp-bio-links a")[0]["href"]
-    #use the internal_url page to find the url for the theater's external site
-    doc2 = Nokogiri::HTML(open(internal_url))
-    doc2.css(".bsp-bio-sub-text a")[1]["href"]
   end
 
 end
