@@ -15,21 +15,26 @@ class LastChanceShows::Show
 
     #search for where 'schedule' or 'show times' are printed and format text accordingly
     if info.include?("SCHEDULE")
-      blurb_i = info.index /[.]\S/
+      binding.pry
+      blurb_i = info.index /[.]\S/ #finds text that runs into another section without a line break or space
       schedule_i = info.index("SCHEDULE")
       show.blurb = info[0..blurb_i]
+
       if show.blurb.include?("SYNOPSIS:")
         show.blurb.gsub!("SYNOPSIS: ", "")
       end
+
       show.schedule = info[schedule_i..last]
     elsif info.include?("Show Times")
       blurb_i = info.index /[.]\S/
       schedule_i = info.index("Show Times")
       last_i = info.index("Tickets") - 1
       show.blurb = info[0..blurb_i]
+
       if show.blurb.include?("SYNOPSIS:")
         show.blurb.gsub!("SYNOPSIS: ", "")
       end
+
       show.schedule = info[schedule_i..last_i]
     end
 
