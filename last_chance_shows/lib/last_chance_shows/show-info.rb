@@ -18,12 +18,18 @@ class LastChanceShows::Show
       blurb_i = info.index /[.]\S/
       schedule_i = info.index("SCHEDULE")
       show.blurb = info[0..blurb_i]
+      if show.blurb.include?("SYNOPSIS:")
+        show.blurb.gsub!("SYNOPSIS: ", "")
+      end
       show.schedule = info[schedule_i..last]
     elsif info.include?("Show Times")
       blurb_i = info.index /[.]\S/
       schedule_i = info.index("Show Times")
       last_i = info.index("Tickets") - 1
       show.blurb = info[0..blurb_i]
+      if show.blurb.include?("SYNOPSIS:")
+        show.blurb.gsub!("SYNOPSIS: ", "")
+      end
       show.schedule = info[schedule_i..last_i]
     end
     #find where run time is listed
