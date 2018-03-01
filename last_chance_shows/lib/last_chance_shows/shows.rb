@@ -7,22 +7,6 @@ class LastChanceShows::Shows
     self.scrape_closings
   end
 
-  def self.find_show_url(show_title)
-    s_url = "http://www.playbill.com/searchpage/search?q="
-    title_parse = show_title.split(" ")
-    title_parse.each do |word|
-      if word.length > 2
-        s_url += word + "+"
-      end
-    end
-    s_url.chomp("+")
-    s_url = s_url + "&sort=Relevance&shows=on&qasset="
-    linkpage = Nokogiri::HTML(open(s_url))
-    show_links = linkpage.css(".bsp-list-promo-title a")
-    show_i = 0
-    found = false
-  end
-
   def self.scrape_closings
     #declaration/assignment of variables
     shows = []

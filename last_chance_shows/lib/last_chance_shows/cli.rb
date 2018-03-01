@@ -3,29 +3,26 @@ class LastChanceShows::CLI
 
   def call
     puts "It's your last chance to see these Broadway/Off-Broadway shows in New York City!"
-    show_count = list_shows
-    menu(show_count)
+    list_shows
+    menu
     goodbye
   end
 
   def list_shows
     @shows = LastChanceShows::Shows.closings
-    count = 0
     @shows.each.with_index(1) do |show, i|
       puts "#{i}. #{show.title}"
       puts "     #{show.venue} // #{show.closing}"
-      count += 1
     end
-    count
   end
 
-  def menu(show_count)
+  def menu
     input = nil
     while input != "exit"
       puts "Enter the number of the show you'd like more info on or type 'list' to see the shows again or type 'exit':"
       input = gets.strip.downcase
 
-      if input.to_i > 0 && input.to_i <= show_count
+      if input.to_i > 0 && input.to_i <= @shows.length
         more_info(@shows[input.to_i - 1].url, @shows[input.to_i - 1].title)
       elsif input == "list"
         list_shows
