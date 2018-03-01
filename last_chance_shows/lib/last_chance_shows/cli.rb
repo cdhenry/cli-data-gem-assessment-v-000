@@ -35,14 +35,17 @@ class LastChanceShows::CLI
 
   def more_info(input_url, input_title)
     show = LastChanceShows::Show.info(input_url)
+    puts ""
     puts "A little bit about #{input_title} :: "
-    puts show.blurb
     puts ""
-    puts show.schedule
+    puts "     " + show.blurb
     puts ""
-    puts show.run_time
+    puts "     " + show.schedule
     puts ""
-    puts "For more information go to :: " + show.theater_url
+    puts "     " + show.run_time
+    puts ""
+    puts "     For more information go to :: " + show.theater_url
+    puts ""
   end
 
   def goodbye

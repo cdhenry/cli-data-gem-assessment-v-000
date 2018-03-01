@@ -28,7 +28,11 @@ class LastChanceShows::Show
     end
     #find where run time is listed
     list = doc.css(".bsp-bio-primary-list")
-    show.run_time = list.children[1].text.strip
+    if list.children[1].text.strip.include?("Running")
+      show.run_time = list.children[1].text.strip
+    else
+      show.run_time = "Run Time Unavailable"
+    end
 
     #get the theater url from a level deeper
     if doc.css(".bsp-bio-subtitle")[0].text.include?("Off-Broadway")
