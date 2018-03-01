@@ -69,6 +69,8 @@ class LastChanceShows::Shows
         found = false
 
         show_links.each do |item|
+          #this is a temporary if statement for a show currently on the website that has a formatting error
+          #this should be removed in subsequent updates and a better fix for formatting errors should be concieved
           if item.text.match(/[\u007B-\u00BF\u02B0-\u037F\u2000-\u2BFF]/)
             if item.text.strip.length - 11 == show.title.length && item.text.strip[-5..-2].to_i >= Time.now.year - 30
               show.url = "http://www.playbill.com" + item["href"]
