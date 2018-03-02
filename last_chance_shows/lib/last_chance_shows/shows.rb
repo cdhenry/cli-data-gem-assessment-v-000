@@ -1,7 +1,7 @@
 #Show scraper for all the shows that are closing soon
 class LastChanceShows::Shows
 
-  attr_accessor :title, :venue, :closing, :url
+  attr_accessor :title, :venue, :closing, :blurb, :schedule, :run_time, :theater_url, :url
 
   def self.closings
     self.scrape_closings
