@@ -8,7 +8,7 @@ class LastChanceShows::Scraper
     self.get_page.css(".bsp-article-content").children #all the elements in the .bsp-article-content class
   end
 
-  def self.make_shows
+  def make_shows
     closing_i = 0   #index counter for keeping track of the 'Closing..' <h2>'s
 
     self.get_shows.each_with_index do |element, i| #find shows and closings by iterating through each child of '.bsp-article-content'
@@ -21,14 +21,13 @@ class LastChanceShows::Scraper
         closing = elements[closing_i].text #assign closing based on text in the last <h2> field
       end
 
-      url = get_show_url
+      url = self.make_show_url
 
       LastChanceShows::Show.new(title, closing, url)
     end
   end
 
-  def get_search_url
-    #create show url based on current site url system (2/26/2018) ***Must happen after show.title is assigned
+  def self.make_search_url
     search_url = "http://www.playbill.com/searchpage/search?q="
     title_parse = show.title.split(" ")
 
@@ -41,8 +40,8 @@ class LastChanceShows::Scraper
     search_url = show_url + "&sort=Relevance&shows=on&qasset="
   end
 
-  def get_show_url
-    linkpage = Nokogiri::HTML(open(search_url))
+  def self.make_show_url
+    linkpage = Nokogiri::HTML(open(make_search_url))
     show_links = linkpage.css(".bsp-list-promo-title a")
 
     show_links.each do |item|
