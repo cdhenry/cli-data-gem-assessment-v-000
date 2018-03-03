@@ -11,7 +11,7 @@ class LastChanceShows::Show
     @@all << self
   end
 
-  def self.all?
+  def self.all
     @@all
   end
 
@@ -20,25 +20,38 @@ class LastChanceShows::Show
   end
 
   def doc
-    @doc = Nokogiri::HTML(open(self.url))
+    @doc = Nokogiri::HTML(open(url))
+  end
+
+  def info
     @info = doc.css(".bsp-bio-text").text.strip
   end
 
   def venue
-    @venue = doc.css("bsp-bio-links-top a")[0].text
-    binding.pry
+    @venue = doc.css(".bsp-bio-links a")[0].text.strip
   end
 
   def blurb
-    blurb_i = info.index/[.]\S/
-    @blurb = info[0..blurb_i]
-    #FIX SYNOPSIS GLITCH
+    blurb_i = info.index(/[.]\S/)
+    text = info[0..blurb_i]
+
+    if text.include?("SCHEDULE") || text.include?("Show Times")
+      blurb_i = info.index("SCHEDULE") || info.index("Show Times")
+      blurb_i -= 1
+      text = info[0..blurb_i]
+    end
+
+    if text.include?("SYNOPSIS:")
+      @blurb = text.gsub("SYNOPSIS:", "\n     SYNOPSIS:")
+    else
+      @blurb = text
+    end
   end
 
   def schedule
     if info.include?("SCHEDULE")
       schedule_i = info.index("SCHEDULE")
-      @schedule = info[schedule_i..info.length]
+      @schedule = info[schedule_i..info.length].gsub("SCHEDULE:", "SCHEDULE: ")
     elsif
       info.include?("Show Times")
       schedule_i = info.index("Show Times")
