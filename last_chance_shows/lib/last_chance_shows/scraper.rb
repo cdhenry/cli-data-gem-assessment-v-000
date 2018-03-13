@@ -19,7 +19,7 @@ class LastChanceShows::Scraper
         title = element.children[0].text #assign title based on text in first child of <p>
         closing = get_shows[closing_i].text #assign closing based on text in the last <h2> field
         url = make_show_url(title) #assign url based on title
-
+        binding.pry
         LastChanceShows::Show.new(title, closing, url) unless closing_to_date(closing) < Date.today
       end
     end
