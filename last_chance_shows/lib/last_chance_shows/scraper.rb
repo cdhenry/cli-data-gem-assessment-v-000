@@ -40,7 +40,7 @@ class LastChanceShows::Scraper
 
   def make_show_url(title)
     google_page = Nokogiri::HTML(open(make_search_url(title)))
-    show_link = google_page.search("//*[@id="rso"]/div/div/div[1]/div/div/h3/a")
+    show_link = google_page.search(".r a")[0]
     binding.pry
     # linkpage = Nokogiri::HTML(open(make_search_url(title)))
     # show_links = linkpage.css(".bsp-list-promo-title a")
