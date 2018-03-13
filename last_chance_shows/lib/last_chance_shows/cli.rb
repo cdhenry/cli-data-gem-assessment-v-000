@@ -16,6 +16,7 @@ class LastChanceShows::CLI
     puts ""
     all_shows.each.with_index(1) do |show, i|
       puts "#{i}. #{show.title}"
+      binding.pry
       puts "     #{show.venue} // #{show.closing}"
       if i % 10 == 0
         puts "Press Enter to continue listings.  There are #{all_shows.length} shows in total."
