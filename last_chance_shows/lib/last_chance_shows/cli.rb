@@ -1,17 +1,7 @@
-#CLI Controller
 class LastChanceShows::CLI
-  # attr_accessor :num_of_shows
-  # attr_reader :shows
-
-  # def initialize
-  #   puts "Loading..."
-  #   @shows = LastChanceShows::Shows.closings
-  #   @num_of_shows = @shows.length
-  #   puts ""
-  # end
-
+  
   def call
-    LastChanceShows::Scraper.make_shows
+    LastChanceShows::Scraper.new.make_shows
     puts "It's your last chance to see these Broadway/Off-Broadway shows in New York City!"
     list_shows
     menu
