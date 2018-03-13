@@ -34,6 +34,7 @@ class LastChanceShows::Scraper
       end
     end
     search_url.chomp("+")
+    binding.pry
     search_url = search_url + "&sort=Relevance&shows=on&qasset="
     binding.pry
   end
