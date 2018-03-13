@@ -21,7 +21,6 @@ class LastChanceShows::Show
 
   def doc
     @doc = Nokogiri::HTML(open(url))
-    binding.pry
   end
 
   def info
