@@ -41,9 +41,10 @@ class LastChanceShows::Scraper
   def make_show_url(title)
     google_page = Nokogiri::HTML(open(make_search_url(title)))
     show_link = google_page.search(//*[@id="rso"]/div/div/div[1]/div/div/h3/a)
+    binding.pry
     # linkpage = Nokogiri::HTML(open(make_search_url(title)))
     # show_links = linkpage.css(".bsp-list-promo-title a")
-    # 
+    #
     # show_links.each do |item|
     #   #this is a temporary if statement for a show currently on the website that has a formatting error
     #   #this should be removed in subsequent updates and a better fix for formatting errors should be concieved
@@ -52,7 +53,7 @@ class LastChanceShows::Scraper
     #       return "http://www.playbill.com" + item["href"]
     #     end
     #   end
-    # 
+    #
     #   #check to see if the searched for link matches the shows title
     #   if item.text.strip.length - 7 == title.length && item.text.strip[-5..-2].to_i >= Time.now.year - 30
     #     return "http://www.playbill.com" + item["href"]
