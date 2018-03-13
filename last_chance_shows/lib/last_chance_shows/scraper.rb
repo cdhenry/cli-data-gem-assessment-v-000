@@ -26,7 +26,7 @@ class LastChanceShows::Scraper
   end
 
   def make_search_url(title)
-    search_url = "http://www.playbill.com/searchpage/search?q="
+    search_url = "https://www.google.com/search?q=playbill+"
     title_parse = title.split(" ")
     title_parse.each do |word|
       if word.length > 2
@@ -34,8 +34,8 @@ class LastChanceShows::Scraper
       end
     end
     search_url.chomp("+")
-    binding.pry
-    search_url = search_url + "&sort=Relevance&shows=on&qasset="
+    # binding.pry
+    # search_url = search_url + "&sort=Relevance&shows=on&qasset="
   end
 
   def make_show_url(title)
