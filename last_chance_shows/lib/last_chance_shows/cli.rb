@@ -1,5 +1,5 @@
 class LastChanceShows::CLI
-  
+
   def call
     LastChanceShows::Scraper.new.make_shows
     puts "It's your last chance to see these Broadway/Off-Broadway shows in New York City!"

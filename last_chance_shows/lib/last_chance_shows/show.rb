@@ -69,6 +69,7 @@ class LastChanceShows::Show
   end
 
   def venue_url
+    binding.pry
     if doc.css(".bsp-bio-subtitle")[0].text.include?("Off-Broadway")
       last_link = doc.css(".bsp-bio-text a").length - 1
       @venue_url = doc.css(".bsp-bio-text a")[last_link]["href"]
